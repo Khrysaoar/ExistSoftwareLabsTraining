@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="6" failures="0" name="com.mytraining.app.MyFileServiceTest" time="0.037" errors="0" skipped="0">
+<testsuite tests="6" failures="0" name="com.mytraining.app.MyFileServiceTest" time="0.05" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="14.0.1+7"/>
@@ -43,7 +43,7 @@
     <property name="java.class.path" value="C:\Program Files\apache-maven-3.6.3\bin\..\boot\plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="14"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher test"/>
     <property name="java.home" value="C:\Program Files\Java\jdk-14.0.1"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
@@ -60,10 +60,10 @@
     <property name="sun.stdout.encoding" value="cp437"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.mytraining.app.MyFileServiceTest" name="readFile_withoutDummyDirectoryandNameAndBoth_shouldReturnTrueIfCatchedSuccessfully" time="0.01"/>
+  <testcase classname="com.mytraining.app.MyFileServiceTest" name="readFile_withoutDummyDirectoryandNameAndBoth_shouldReturnTrueIfCatchedSuccessfully" time="0.011"/>
   <testcase classname="com.mytraining.app.MyFileServiceTest" name="getLatestFilefromDir_withoutDummyDirectory_shouldReturnNullIfFileDoesntExist" time="0"/>
-  <testcase classname="com.mytraining.app.MyFileServiceTest" name="getLatestFilefromDir_withDummyDirectory_shouldReturnTrueIfFileExists" time="0.016"/>
-  <testcase classname="com.mytraining.app.MyFileServiceTest" name="writeReadableToFile_withDummyArrayDirectoryandName_shouldReturnTrueIfWrittenSuccessfully" time="0.01"/>
+  <testcase classname="com.mytraining.app.MyFileServiceTest" name="getLatestFilefromDir_withDummyDirectory_shouldReturnTrueIfFileExists" time="0.023"/>
+  <testcase classname="com.mytraining.app.MyFileServiceTest" name="writeReadableToFile_withDummyArrayDirectoryandName_shouldReturnTrueIfWrittenSuccessfully" time="0.015"/>
   <testcase classname="com.mytraining.app.MyFileServiceTest" name="writeReadableToFile_withNulls_shouldReturnFalseIfNull" time="0"/>
   <testcase classname="com.mytraining.app.MyFileServiceTest" name="readFile_withDummyDirectoryandName_shouldReturnTrueIfReadSuccessfully" time="0.001"/>
 </testsuite>

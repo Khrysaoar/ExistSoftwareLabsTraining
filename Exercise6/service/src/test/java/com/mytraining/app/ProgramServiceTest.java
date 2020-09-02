@@ -32,41 +32,9 @@ public class ProgramServiceTest {
 	
 	//POSITIVE CASE
     @Test
-    public void initiateProgram_shouldreturntheMenuWithoutException() {
-		System.out.println("[POSITIVE]TEST--initiateProgram_shouldreturntheMenuWithoutException()");
-		try {
-			programService.initiateProgram("test");
-			
-		} catch(Exception e) {
-			System.out.println(e);
-		}
-		
-    }
-	
-	//POSITIVE CASE
-    @Test
     public void confirmTable_shouldreturnthatATableExist() {
 		System.out.println("[POSITIVE]TEST--confirmTable_shouldreturnthatATableExist()");
-		try {
-			myFileService.writeReadableToFile(dummyArray, dummyDirectory, dummyName);
-			programService.confirmTable("test");
-			
-		} catch(Exception e) {
-			System.out.println(e);
-		}
-		
-    }
-	
-	//NEGATIVE CASE
-    @Test
-    public void confirmTable_shouldreturnthatATableDoesNotExist() {
-		System.out.println("[NEGATIVE]TEST--confirmTable_shouldreturnthatATableDoesNotExist()");
-		try {
-			programService.confirmTable("test");
-			
-		} catch(Exception e) {
-			System.out.println(e);
-		}
+		assertNotNull(programService.confirmTable("test"));
 		
     }
 	
