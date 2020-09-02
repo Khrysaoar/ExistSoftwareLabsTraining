@@ -8,8 +8,8 @@ import org.junit.*;
  * Unit test for ProgramServiceTest class.
  */
 public class ProgramServiceTest {
-	ProgramService ps = new ProgramService();
-	MyFileService mf = new MyFileService();
+	ProgramService programService = new ProgramService();
+	MyFileService myFileService = new MyFileService();
 	
 	private String dummyDirectory;
 	private String dummyName;
@@ -27,7 +27,7 @@ public class ProgramServiceTest {
 	
 	@After
 	public void finalize() {
-		mf.initDeleteFile(dummyDirectory, dummyName);
+		myFileService.initDeleteFile(dummyDirectory, dummyName);
 	}
 	
 	//POSITIVE CASE
@@ -35,7 +35,7 @@ public class ProgramServiceTest {
     public void initiateProgram_shouldreturntheMenuWithoutException() {
 		System.out.println("[POSITIVE]TEST--initiateProgram_shouldreturntheMenuWithoutException()");
 		try {
-			ps.initiateProgram("test");
+			programService.initiateProgram("test");
 			
 		} catch(Exception e) {
 			System.out.println(e);
@@ -48,8 +48,8 @@ public class ProgramServiceTest {
     public void confirmTable_shouldreturnthatATableExist() {
 		System.out.println("[POSITIVE]TEST--confirmTable_shouldreturnthatATableExist()");
 		try {
-			mf.writeReadableToFile(dummyArray, dummyDirectory, dummyName);
-			ps.confirmTable("test");
+			myFileService.writeReadableToFile(dummyArray, dummyDirectory, dummyName);
+			programService.confirmTable("test");
 			
 		} catch(Exception e) {
 			System.out.println(e);
@@ -62,7 +62,7 @@ public class ProgramServiceTest {
     public void confirmTable_shouldreturnthatATableDoesNotExist() {
 		System.out.println("[NEGATIVE]TEST--confirmTable_shouldreturnthatATableDoesNotExist()");
 		try {
-			ps.confirmTable("test");
+			programService.confirmTable("test");
 			
 		} catch(Exception e) {
 			System.out.println(e);
@@ -74,22 +74,22 @@ public class ProgramServiceTest {
 	@Test
 	public void validateInput_withRequireParametersAndTheTestType_inputtedParametersShouldExists() {
 		System.out.println("[POSITIVE]TEST--validateInput_withRequireParameterAndTheTestType_inputtedParametersShouldExists()");
-		assertSame(ps.validateInput("Columns", "test"), "true");
-		assertSame(ps.validateInput("Rows", "test"), "true");
-		assertSame(ps.validateInput("Search", "test"), "true");
-		assertSame(ps.validateInput("Menu", "test"), "true");
-		assertSame(ps.validateInput("Edit/Row", "test"), "true");
-		assertSame(ps.validateInput("Edit/Column", "test"), "true");
-		assertSame(ps.validateInput("Edit/Value", "test"), "true");
-		assertSame(ps.validateInput("Sort", "test"), "true");
+		assertSame(programService.validateInput("Columns", "test"), "true");
+		assertSame(programService.validateInput("Rows", "test"), "true");
+		assertSame(programService.validateInput("Search", "test"), "true");
+		assertSame(programService.validateInput("Menu", "test"), "true");
+		assertSame(programService.validateInput("Edit/Row", "test"), "true");
+		assertSame(programService.validateInput("Edit/Column", "test"), "true");
+		assertSame(programService.validateInput("Edit/Value", "test"), "true");
+		assertSame(programService.validateInput("Sort", "test"), "true");
 	}
 	
 	//NEGATIVE CASE
 	@Test
 	public void validateInput_withWrongParametersAndTheTestType_inputtedParametersShouldNotExists() {
 		System.out.println("[NEGATIVE]TEST--validateInput_withWrongParameterAndTheTestType_inputtedParametersShouldNotExists()");
-		assertSame(ps.validateInput(" ", "test"), "false");
-		assertSame(ps.validateInput("", "test"), "false");
-		assertSame(ps.validateInput("RANDOM", "test"), "false");
+		assertSame(programService.validateInput(" ", "test"), "false");
+		assertSame(programService.validateInput("", "test"), "false");
+		assertSame(programService.validateInput("RANDOM", "test"), "false");
 	}
 }

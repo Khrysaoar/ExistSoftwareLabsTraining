@@ -12,7 +12,7 @@ import org.junit.rules.ExpectedException;
  * Unit test for MyFileService class.
  */
 public class MyFileServiceTest {
-	MyFileService mf = new MyFileService();
+	MyFileService myFileService = new MyFileService();
 	
 	private String dummyDirectory;
 	private String dummyName;
@@ -31,50 +31,50 @@ public class MyFileServiceTest {
 	
 	@After
 	public void finalize() {
-		mf.initDeleteFile(dummyDirectory, dummyName);
+		myFileService.initDeleteFile(dummyDirectory, dummyName);
 	}
 	
     @Test
     public void writeReadableToFile_withNulls_shouldReturnFalseIfNull() {
-        assertFalse(mf.writeReadableToFile(null, dummyDirectory, dummyName));
-        assertFalse(mf.writeReadableToFile(dummyArray, null, dummyName));
-        assertFalse(mf.writeReadableToFile(dummyArray, dummyDirectory, null));
-        assertFalse(mf.writeReadableToFile(null, null, null));
+        assertFalse(myFileService.writeReadableToFile(null, dummyDirectory, dummyName));
+        assertFalse(myFileService.writeReadableToFile(dummyArray, null, dummyName));
+        assertFalse(myFileService.writeReadableToFile(dummyArray, dummyDirectory, null));
+        assertFalse(myFileService.writeReadableToFile(null, null, null));
     }
 	
     @Test
     public void writeReadableToFile_withDummyArrayDirectoryandName_shouldReturnTrueIfWrittenSuccessfully() {
-        assertTrue(mf.writeReadableToFile(dummyArray, dummyDirectory, dummyName));
+        assertTrue(myFileService.writeReadableToFile(dummyArray, dummyDirectory, dummyName));
     }
 	
 	@Test
     public void getLatestFilefromDir_withDummyDirectory_shouldReturnTrueIfFileExists() {
-		mf.writeReadableToFile(dummyArray, dummyDirectory, dummyName);
-		File locatedDummyFile = mf.getLatestFilefromDir(dummyDirectory);
+		myFileService.writeReadableToFile(dummyArray, dummyDirectory, dummyName);
+		File locatedDummyFile = myFileService.getLatestFilefromDir(dummyDirectory);
 		
         assertTrue(locatedDummyFile.exists());
     }
 	
 	@Test
     public void getLatestFilefromDir_withoutDummyDirectory_shouldReturnNullIfFileDoesntExist() {
-		File locatedDummyFile = mf.getLatestFilefromDir("");
+		File locatedDummyFile = myFileService.getLatestFilefromDir("");
 		
         assertNull("File does not exist...", locatedDummyFile);
     }
 	
     @Test
     public void readFile_withDummyDirectoryandName_shouldReturnTrueIfReadSuccessfully() {
-		dummyList = new ArrayList<>(mf.readFile(dummyDirectory, dummyName));
+		dummyList = new ArrayList<>(myFileService.readFile(dummyDirectory, dummyName));
 		
-        assertNotNull("File exist...", mf.readFile(dummyDirectory, dummyName));
+        assertNotNull("File exist...", myFileService.readFile(dummyDirectory, dummyName));
         assertNotNull("File Content Successfully transferred to a List...", dummyList);
     }
 	
     @Test
     public void readFile_withoutDummyDirectoryandNameAndBoth_shouldReturnTrueIfCatchedSuccessfully() {
-        assertTrue(mf.readFile(dummyDirectory, "").isEmpty());
-        assertTrue(mf.readFile("", dummyName).isEmpty());
-        assertTrue(mf.readFile("", "").isEmpty());
+        assertTrue(myFileService.readFile(dummyDirectory, "").isEmpty());
+        assertTrue(myFileService.readFile("", dummyName).isEmpty());
+        assertTrue(myFileService.readFile("", "").isEmpty());
 		
     }
 	

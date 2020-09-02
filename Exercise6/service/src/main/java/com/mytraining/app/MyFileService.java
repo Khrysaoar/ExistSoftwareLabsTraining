@@ -6,19 +6,8 @@ import org.apache.commons.io.input.AutoCloseInputStream;
 import org.apache.commons.io.FileUtils;
 
 public class MyFileService {
-	public int noRows;
-	public	int noCols;
-	private String currentFileName;
-	private List<String> arrList;
-	public final String DIR_NAME;
-	Table tab;
-	MyFile myFile;
 	
-	public MyFileService() {
-		myFile = new MyFile();
-		DIR_NAME = myFile.getDirectoryName();
-		arrList = new ArrayList<String>();
-	}
+	public MyFileService() {}
 	
 	//should test
 	public File getLatestFilefromDir(String directoryName) {
@@ -40,10 +29,10 @@ public class MyFileService {
 	}
 	
 	public void initWriteToFile(String[][] arrTable)  {
+		MyFile myFile = new MyFile();
 		myFile.setCurrentFileName("ReadableTable.txt");
-		currentFileName = myFile.getCurrentFileName();
 		
-		boolean isCreated = writeReadableToFile(arrTable, DIR_NAME, currentFileName);
+		boolean isCreated = writeReadableToFile(arrTable, myFile.getDirectoryName(), myFile.getCurrentFileName());
 	}
 	
 	//should test
@@ -81,27 +70,21 @@ public class MyFileService {
 	}
 	
 	public List initReadFile(String directoryName) {
-		myFile.setCurrentFileName(getLatestFilefromDir(DIR_NAME).toString().replace(DIR_NAME+"\\",""));
-		currentFileName = myFile.getCurrentFileName();
+		MyFile myFile = new MyFile();
+		myFile.setCurrentFileName(getLatestFilefromDir(myFile.getDirectoryName()).toString().replace(myFile.getDirectoryName()+"\\",""));
 		
-		return readFile(directoryName, currentFileName);
+		return readFile(directoryName, myFile.getCurrentFileName());
 	}
-	
-	public void initDeleteFile(String dir, String curFile) {
-		String filePath = dir + "\\" + curFile;
-		
-		File file = new File(filePath);
-			
-		FileUtils.deleteQuietly(file);
-	} 
 	
 	//should test
 	public List readFile(String directoryName, String curFileName) {
 		Scanner scanner;
 		
+		List<String> arrList = new ArrayList<String>();
+		
+		
 		String currentDirectory = System.getProperty("user.dir");
 		
-		tab = new Table();
 		try {
 			File readFile = new File(currentDirectory + "\\" 
 									+ directoryName + "\\" 
@@ -112,15 +95,50 @@ public class MyFileService {
 			
 			readLines.forEach(i -> listWords.add(i.toString().replace(" | ", " ").split(" ")));
 			
-			noRows = 0;
+			for(String[] rows : listWords) {
+				for(String cell : rows) {
+					arrList.add(cell);
+				}
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("File does not exist...");
+		} catch (IOException e) {
+			System.out.println("This is not a list...");
+		} 
+		
+		return arrList;
+		
+	}
+	
+	//should test
+	public Table getTableProperties(String directoryName, Table tab) {
+		Scanner scanner;
+		MyFile myFile = new MyFile();
+		myFile.setCurrentFileName(getLatestFilefromDir(myFile.getDirectoryName()).toString().replace(myFile.getDirectoryName()+"\\",""));
+		
+		String curFileName = myFile.getCurrentFileName();
+		String currentDirectory = System.getProperty("user.dir");
+		
+		try {
+			File readFile = new File(currentDirectory + "\\" 
+									+ directoryName + "\\" 
+									+ curFileName);
+			
+			List<String[]> listWords = new ArrayList<>();
+			List<String> readLines = FileUtils.readLines(readFile);
+			
+			readLines.forEach(i -> listWords.add(i.toString().replace(" | ", " ").split(" ")));
+			
+			int noRows = 0;
+			int noCols = 0;
+			
 			for(String[] rows : listWords) {
 				noRows++;
 				
 				noCols = 0;
 				for(String cell : rows) {
 					noCols++;
-					
-					arrList.add(cell);
 				}
 			}
 			
@@ -133,8 +151,16 @@ public class MyFileService {
 			System.out.println("This is not a list...");
 		} 
 		
-		return arrList;
+		return tab;
 		
 	}
+	
+	public void initDeleteFile(String dir, String curFile) {
+		String filePath = dir + "\\" + curFile;
+		
+		File file = new File(filePath);
+			
+		FileUtils.deleteQuietly(file);
+	} 
 	
 }

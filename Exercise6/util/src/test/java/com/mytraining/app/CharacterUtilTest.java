@@ -13,17 +13,13 @@ public class CharacterUtilTest {
 	
     @Test
     public void generateRandomCharacters_withInputedNumberofChars3_shouldGenerateThreeRandomChars() {
-		int noOfRandomChars = c.generateRandomChars(3).length();
-		boolean isTrue = 3 == noOfRandomChars;
-		
-        assertTrue(isTrue);
+		int noOfRandomChars = c.generateRandomChars(3).length();		
+        assertEquals(3, noOfRandomChars);
 	}
 	
     @Test
 	public void generateRandomCharacters_withInputedNumberofCharsMoreThan3_shouldStillGenerateThreeRandomChars() {
-		int noOfRandomChars = c.generateRandomChars(6).length();
-		boolean isTrue = 3 == noOfRandomChars;
-		
-        assertTrue(isTrue);
+		int noOfRandomChars = c.generateRandomChars(6).length();	
+        assertEquals(3, noOfRandomChars);
     }
 }

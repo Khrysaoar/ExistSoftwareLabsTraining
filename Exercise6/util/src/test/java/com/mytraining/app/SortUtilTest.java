@@ -6,10 +6,10 @@ import org.junit.*;
 import java.util.*;
 
 /**
- * Unit test for SortUtil class.
+ * Unit test for SortUtil classortIt.
  */
 public class SortUtilTest {
-	private SortUtil s = new SortUtil();
+	private SortUtil sortIt = new SortUtil();
 	private String[] dummyArrayStrings1;
 	private String[] dummyArrayStrings2;
 	private String[] dummyArrayStringsN1;
@@ -43,78 +43,66 @@ public class SortUtilTest {
 	
     @Test
     public void concatKeyValue_withArrayOfStringKeyValuePair_shouldReturnTrue() {
-		init();
-		dummyArrayStrings1 = s.concatKeyValue(dummyArrayStrings1);
+		dummyArrayStrings1 = sortIt.concatKeyValue(dummyArrayStrings1);
 		
         assertTrue( Arrays.equals(dummyArrayStrings1, dummyArrayStrings2) );
     }
 	
 	@Test
     public void concatKeyValue_withArrayOfStringKeyValuePairWithNull_shouldReturnTrue() {
-		init();
-		dummyArrayStringsN1 = s.concatKeyValue(dummyArrayStringsN1);
+		dummyArrayStringsN1 = sortIt.concatKeyValue(dummyArrayStringsN1);
 		
         assertTrue( Arrays.equals(dummyArrayStringsN1, dummyArrayStringsN2) );
     }
 	
     @Test
     public void reformatKeyValue_withArrayOfStringKeyValuePair_shouldReturnTrue() {
-		init();
-		dummyArrayStrings2 = s.reformatKeyValue(dummyArrayStrings2);
+		dummyArrayStrings2 = sortIt.reformatKeyValue(dummyArrayStrings2);
 		
         assertTrue( Arrays.equals(dummyArrayStrings2, dummyArrayStrings1) );
     }
 	
 	@Test
     public void reformatKeyValue_withArrayOfStringKeyValuePairWithNull_shouldReturnTrue() {
-		init();
-		dummyArrayStringsN4 = s.reformatKeyValue(dummyArrayStringsN4);
+		dummyArrayStringsN4 = sortIt.reformatKeyValue(dummyArrayStringsN4);
 		
         assertTrue( Arrays.equals(dummyArrayStringsN4, dummyArrayStringsN3) );
     }
 	
     @Test
     public void sortRow_withArrayOfStringKeyValuePair_shouldReturnTrue() {
-		init();
-		dummyArrayStrings1 = s.sortRow(dummyArrayStrings1);
+		dummyArrayStrings1 = sortIt.sortRow(dummyArrayStrings1);
 		
         assertTrue( Arrays.equals(dummyArrayStrings1, dummyArrayStringsSorted) );
     }
 	
     @Test
     public void unsortRow_withArrayOfStringKeyValuePair_shouldReturnTrue() {
-		init();
-		dummyArrayStrings1 = s.unsortRow(dummyArrayStrings1);
+		dummyArrayStrings1 = sortIt.unsortRow(dummyArrayStrings1);
 		
         assertTrue( Arrays.equals(dummyArrayStrings1, dummyArrayStringsUnsorted) );
     }
 	
     @Test
     public void isSorted_withArrayOfStringKeyValuePair_shouldReturnTrue() {
-		init();
-		
-        assertTrue( s.isSorted(dummyArrayStringsSorted));
+        assertTrue( sortIt.isSorted(dummyArrayStringsSorted));
     } 
 	
     @Test
     public void isSorted_withArrayOfStringKeyValuePair_shouldReturnFalse() {
-		init();
-		
-        assertFalse( s.isSorted(dummyArrayStringsUnsorted));
+        assertFalse( sortIt.isSorted(dummyArrayStringsUnsorted));
     }
 	
     @Test
     public void sortRow_withArrayOfStringKeyValuePairWithNull_shouldReturnTrue() {
-		init();
-		dummyArrayStringsN1 = s.sortRow(dummyArrayStringsN1);
+		dummyArrayStringsN1 = sortIt.sortRow(dummyArrayStringsN1);
 		
         assertTrue( Arrays.equals(dummyArrayStringsN1, dummyArrayStringsSortedN) );
     }
 	
     @Test
     public void unsortRow_withArrayOfStringKeyValuePairWithNull_shouldReturnTrue() {
-		init();
-		dummyArrayStringsN1 = s.unsortRow(dummyArrayStringsN1);
+		dummyArrayStringsN1 = sortIt.unsortRow(dummyArrayStringsN1);
 		
         assertTrue( Arrays.equals(dummyArrayStringsN1, dummyArrayStringsUnsortedN) );
     }

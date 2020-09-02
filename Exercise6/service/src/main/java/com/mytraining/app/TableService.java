@@ -5,79 +5,54 @@ import org.apache.commons.collections4.*;
 import org.apache.commons.lang3.*;
  
 public class TableService {
-	public int row;
-	public int col;
-	private String key;
-	private String value;
-	private int noDigitsCol;
-	private	int noDigitsRow;
-	private String DIR_NAME;
-	private Table tab;
+	private String[][] arrayOfRow;
 	
-	Random r = new Random();
-	Map map;
-	List<String> extractedList;
-	List<String> updatedList;
-	MyFileService myFileService;
-	CharacterUtil genChar;
-	SortUtil s;
-	String[][] arrayOfRow;
-	
-	public TableService() {
-		instantiateVariables();
-	}
-	
-	public void instantiateVariables() {
-		try {
-			tab = new Table();
-			myFileService = new MyFileService();
-			s = new SortUtil();
-			genChar = new CharacterUtil();
-			extractedList = new ArrayList<String>();
-			updatedList = null;
-			this.DIR_NAME = myFileService.DIR_NAME;
-		} catch(Exception e) {
-			System.out.println("Exception is catched");
-		}
-	}
+	public TableService() {}
 	
 	//Should test
-	public void saveUpdatedTable(String type) {
+	public boolean saveUpdatedTable(String type, Table tab) {
+		MyFileService myFileService = new MyFileService();
 		System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
 		
-		readListToArr();
+		readListToArr(type, tab);
 		
 		if (type == "test") {
 			System.out.println("::::::::::::::::::::::::::::TABLE::SAVED[TEST]:::::::::::::::::::::::::::::");
+			return true;
 		} else {
 			try {
 				myFileService.initWriteToFile(arrayOfRow);
 				System.out.println(":::::::::::::::::::::::::::::::::TABLE::SAVED:::::::::::::::::::::::::::::::::");
+				return true;
 			
 			} catch(Exception e) {
 				System.out.println("An error occurred.");
 				e.printStackTrace();
 			}
+			return false;
 		}
 	}
 	
 	//should test
-	public void sortSelectedRow(int selectedRow, String type) {
+	public Table sortSelectedRow(int selectedRow, String type, Table tab) {
+		SortUtil sortIt = new SortUtil();
+		
 		System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
 		
 		String mode;
 		
-		readListToArr(); 
+		readListToArr(type, tab); 
 		
-		updatedList.clear();
+		List<String> tableList = new ArrayList<String>();
+		
 		if(selectedRow > 0) {
 			selectedRow--;
 			
-			if(s.isSorted(arrayOfRow[selectedRow])) {
-				arrayOfRow[selectedRow] = s.unsortRow(arrayOfRow[selectedRow]);
+			if(sortIt.isSorted(arrayOfRow[selectedRow])) {
+				arrayOfRow[selectedRow] = sortIt.unsortRow(arrayOfRow[selectedRow]);
 				mode = "UNSORTED";
 			} else {
-				arrayOfRow[selectedRow] = s.sortRow(arrayOfRow[selectedRow]);
+				arrayOfRow[selectedRow] = sortIt.sortRow(arrayOfRow[selectedRow]);
 				mode = "SORTED";
 			}
 			
@@ -86,61 +61,77 @@ public class TableService {
 					
 					int num = 3;
 					
-					key = arrayOfRow[i][h].substring(0, num);
-					value = arrayOfRow[i][h].substring(num+1, arrayOfRow[i][h].length());
-					
-					updatedList.add(key + "=" + value);
+					String key = arrayOfRow[i][h].substring(0, num);
+					String value = arrayOfRow[i][h].substring(num+1, arrayOfRow[i][h].length());
+		
+					tableList.add(key + "=" + value);
 				}
 			}
 			
+			tab.setTableList(tableList);
+			
 			System.out.println(":::::::::::::::::::::::::::::::::ROW:" + mode + ":::::::::::::::::::::::::::::::::");
+			
+			return tab;
 		} else if(selectedRow == 0) {
 			System.out.println("No rows selected!");
+			return tab;
 		} else {
 			System.out.println("Row does not exist!");
+			return tab;
 		}
 		
 	}
 	
 	//should test
-	public void insertRow() { 
-		row++;
+	public Table insertRow(Table tab) { 
+		CharacterUtil genChar = new CharacterUtil();
+		List<String> tableList = new ArrayList<String>(tab.getTableList());
+		Map<String, String> map = new HashMap<String, String>(tab.getTableMap());
 		
-		for (int j = 0; j < col; j++){
-			int rowNo = row;
-			int colNo = j+1;
+		int row = tab.getRows();
+		row++;
+		tab.setRows(row);
+		
+		for (int j = 0; j < tab.getCols(); j++){
 			
-			key = genChar.generateRandomChars(3);
-			value = genChar.generateRandomChars(3);
+			String key = genChar.generateRandomChars(3);
+			String value = genChar.generateRandomChars(3);
 			
 			map.put(key,value);
 			
-			updatedList.add(key + "=" + value);
+			tableList.add(key + "=" + value);
 		}
+		
+		tab.setTableList(tableList);
+		tab.setTableMap(map);
 		
 		System.out.println(":::::::::::::::::::::::::::::::::ROW:ADDED:::::::::::::::::::::::::::::::::");
+		
+		return tab;
 	}
 	
 	//should test
-	public void createTable(int cols, int rows, String type) {
+	public Table createTable(int cols, int rows, String type) {
+		CharacterUtil genChar = new CharacterUtil();
+		Map<String, String> map = new HashMap<String, String>();
+		
 		System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-		tab.setRows(rows);
-		tab.setCols(cols);
-		row = tab.getRows();
-		if(row <= 0) {
-			row = 1;
-		}
-		col = tab.getCols();
-		if(col <= 0) {
-			col = 1;
+		
+		if(rows <= 0) {
+			rows = 1;
 		}
 		
+		if(cols <= 0) {
+			cols = 1;
+		}
 		
-		String[][] arrToMap = new String[row*col][2];
+		String[][] arrToMap = new String[rows*cols][2];
+		
 		int iterate = 0;
-		for (int i = 0; i < row*col; i++) {
-			key = genChar.generateRandomChars(3);
-			value = genChar.generateRandomChars(3);
+		for (int i = 0; i < rows*cols; i++) {
+			String key = genChar.generateRandomChars(3);
+			String value = genChar.generateRandomChars(3);
 				
 			arrToMap[iterate][0] = key;
 			arrToMap[iterate][1] = value;
@@ -149,63 +140,41 @@ public class TableService {
 		
 		map = MapUtils.putAll(new HashMap(), arrToMap);
 		
-		System.out.println("Table Created with "+ row +" rows and "+ col +" columns!");
+		if(type == "test") {
+			type = "Test Created";
+		}
+		System.out.println("Table "+ type +" with "+ rows +" rows and "+ cols +" columns!");
 		
-		updatedList = new ArrayList<String>();
+		List<String> tableList = new ArrayList<String>();
 		
 		for(Object entry : map.entrySet()) {
-			updatedList.add(entry.toString());
+			tableList.add(entry.toString());
 		}
-		
-		saveUpdatedTable(type);
-	}
 	
-	//should test
-	public void resetTable(int cols, int rows) {
-		System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+		Table tab = new Table();
+		tab.setTableList(tableList);
+		tab.setTableMap(map);
 		tab.setRows(rows);
 		tab.setCols(cols);
-		row = tab.getRows();
-		col = tab.getCols();
-		if(row <= 0) {
-			row = 1;
-		}
-		col = tab.getCols();
-		if(col <= 0) {
-			col = 1;
+		
+		if(type == "Created") {
+			saveUpdatedTable(type, tab);
+		} else if(type == "Reset") {			
+			readListToArr(type, tab);
 		}
 		
-		String[][] arrToMap = new String[row*col][2];
-		int iterate = 0;
-		for (int i = 0; i < row*col; i++) {
-			key = genChar.generateRandomChars(3);
-			value = genChar.generateRandomChars(3);
-				
-			arrToMap[iterate][0] = key;
-			arrToMap[iterate][1] = value;
-			iterate++;
-		}
-		
-		map = MapUtils.putAll(new HashMap(), arrToMap);
-		
-		System.out.println("Table Reset with "+ row +" rows and "+ col +" columns!");
-		System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-		
-		updatedList = new ArrayList<String>();
-		
-		for(Object entry : map.entrySet()) {
-			updatedList.add(entry.toString());
-		}
-		
-		System.out.println(updatedList);
-		readListToArr();
+		return tab;
 	}
 	
 	//should test
-	public void displayTable(){
+	public boolean displayTable(String type, Table tab){
 		System.out.println(":::::::::::::::::::::::::::::::::DISPLAY:::::::::::::::::::::::::::::::::::");
 		
-		readListToArr(); 
+		readListToArr(type, tab); 
+		
+		if(arrayOfRow == null) {
+			return false;
+		}
 		
 		for(int i = 0; i < arrayOfRow.length; i++) {
 			for(int h = 0; h < arrayOfRow[i].length; h++) {								
@@ -217,54 +186,67 @@ public class TableService {
 			System.out.println();
 		}
 		System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+		
+		return true;
 	}
 	
 	//should test
-	public void updateCellTable(int selRow, int selCol, String value) {
+	public Table updateCellTable(int selRow, int selCol, String value, Table tab, String type) {
+		Map<String, String> map = new HashMap<String, String>(tab.getTableMap());
+		
 		String selCell = "";
 		if(selRow < 1 && selCol <1) {
 			System.out.println("Cell not found!");
-		} else {
-			for(int g = 0; g < selRow; g++) {
-				for(int h = 0; h < selCol; h++) {
-					selCell = arrayOfRow[g][h].substring(0,3);
-				}
-			}
-			
-			map.put(selCell, value);
-			
-			readListToArr();
-			
-			arrayOfRow[selRow-1][selCol-1] = selCell + "=" + value; 
-			
-			updatedList.clear();
-			
-			for(int g = 0; g < row; g++) {
-				for(int h = 0; h < col; h++) {
-					updatedList.add(arrayOfRow[g][h]);
-				}
-			}
-			
-			
-			System.out.println(":::::::::::::::::::::::::::::TABLE:UPDATED:::::::::::::::::::::::::::::::::");
+			return tab;
 		}
+		
+		for(int g = 0; g < selRow; g++) {
+			for(int h = 0; h < selCol; h++) {
+				selCell = arrayOfRow[g][h].substring(0,3);
+			}
+		}
+			
+		map.put(selCell, value);
+			
+		readListToArr(type, tab);
+			
+		arrayOfRow[selRow-1][selCol-1] = selCell + "=" + value; 
+			
+		List<String> tableList = new ArrayList<String>();
+			
+		for(int g = 0; g < tab.getRows(); g++) {
+			for(int h = 0; h < tab.getCols(); h++) {
+				tableList.add(arrayOfRow[g][h]);
+			}
+		}
+			
+		tab.setTableList(tableList);
+		tab.setTableMap(map);
+		
+		System.out.println(":::::::::::::::::::::::::::::TABLE:UPDATED:::::::::::::::::::::::::::::::::");
+		
+		return tab;
+		
 	}
 	
 	//should test
-	public void searchTable(String query) {
+	public void searchTable(Table tab, String query) {
 		if(query != "") {
 			System.out.println("::::::::::::::::::::::::::::::::RESULTS::::::::::::::::::::::::::::::::::::");
-		
+			
+			List<String> tableList = new ArrayList<String>(tab.getTableList());
+			
+			
 			int k = 0;
 			int j = 0;
 			int occur = 0;
 			
-			for(int i = 0; i < updatedList.size(); i++){
+			for(int i = 0; i < tableList.size(); i++){
 				
 				int num = 4;
-				int lengthVal = updatedList.get(i).length();
+				int lengthVal = tableList.get(i).length();
 				
-				String newVal = updatedList.get(i).substring(0, 3) + updatedList.get(i).substring(num, lengthVal);
+				String newVal = tableList.get(i).substring(0, 3) + tableList.get(i).substring(num, lengthVal);
 				String arrayStr = new String(newVal);
 				
 				int index = arrayStr.indexOf(query);
@@ -302,7 +284,7 @@ public class TableService {
 					}
 				}
 				k++;
-				if(k == col) {
+				if(k == tab.getCols()) {
 					k = 0;
 					j++;
 				}
@@ -317,41 +299,54 @@ public class TableService {
 	}
 	
 	//should test
-	public void readFiletoList(String type) {
+	public Table readFiletoList(String type) {
+		MyFileService myFileService = new MyFileService();
+		MyFile myFile = new MyFile();
+		Table tab = new Table();
+		
+		List<String> extractedList = new ArrayList<String>();
+		
 		if(type != "test") {
-			extractedList = new ArrayList<String>(myFileService.initReadFile(myFileService.DIR_NAME));
+			extractedList = new ArrayList<String>(myFileService.initReadFile(myFile.getDirectoryName()));
 		}
 		
-		updatedList = ListUtils.defaultIfNull(updatedList, extractedList);
+		Map<String, String> map = new HashMap<String, String>();
 		
-		map = new HashMap();
-		
-		for(String cell : updatedList) {
+		for(String cell : extractedList) {
 			map.put(cell.substring(0,3), cell.substring(4,7));
 		}
+		
+		tab.setTableList(extractedList);
+		tab.setTableMap(map);
+		
+		return myFileService.getTableProperties(myFile.getDirectoryName(), tab);
 	}
 	 
 	//should test
-	public void readListToArr() {
-		if(row == 0) {
-			row = myFileService.noRows;
-			col = myFileService.noCols;
-		}
-		
-		arrayOfRow = new String[row][col];
-		
-		if(!CollectionUtils.isEmpty(updatedList)) {
-			int k = 0;
-			int j = 0;
-			for(int i = 0; i < updatedList.size(); i++) {
-				arrayOfRow[j][k] = updatedList.get(i);
-				
-				k++;
-				
-				if(k == col){
-					k = 0;
-					j++;
+	public void readListToArr(String type, Table tab) {
+		if(tab != null) {
+			List<String> tableList = new ArrayList<String>(tab.getTableList());
+			
+			int row = tab.getRows();
+			int col = tab.getCols();
+			
+			arrayOfRow = new String[row][col];
+			
+			if(!CollectionUtils.isEmpty(tableList)) {
+				int k = 0;
+				int j = 0;
+				for(int i = 0; i < tableList.size(); i++) {
+					arrayOfRow[j][k] = tableList.get(i);
+					
+					k++;
+					
+					if(k == col){
+						k = 0;
+						j++;
+					}
 				}
+			} else {
+				System.out.println("No data to read...");
 			}
 		} else {
 			System.out.println("No data to read...");

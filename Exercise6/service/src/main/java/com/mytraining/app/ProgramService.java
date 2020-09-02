@@ -8,14 +8,14 @@ public class ProgramService {
 	private static int valX;
 	private static int valY;
 	
-	private static TableService tabService;
+	private static Table tab;
 	
 	public ProgramService() {}
 	
 	//Should test
 	public static void initiateProgram(String type) {
 		if(type != "test") {
-			tabService = confirmTable("");
+			TableService tabService = confirmTable("");
 			
 			boolean isMenu = true;
 			
@@ -38,7 +38,7 @@ public class ProgramService {
 					case 1:
 						String getSearchData = validateInput("Search", "");
 						
-						tabService.searchTable(getSearchData);
+						tabService.searchTable(tab, getSearchData);
 						
 						continue;
 					case 2:
@@ -51,11 +51,11 @@ public class ProgramService {
 						int newX = Integer.parseInt(selRow);
 						int newY = Integer.parseInt(selCol);
 						
-						tabService.updateCellTable(newX, newY, newVal);
+						tab = tabService.updateCellTable(newX, newY, newVal, tab, "");
 						
 						continue;
 					case 3:
-						tabService.displayTable();
+						tabService.displayTable("", tab);
 						
 						continue;
 					case 4:
@@ -64,12 +64,12 @@ public class ProgramService {
 						valY = Integer.parseInt(validateInput("Columns", ""));
 						valX = Integer.parseInt(validateInput("Rows", ""));
 											
-						tabService.resetTable(valX, valY);
-						tabService.displayTable();
+						tab = tabService.createTable(valX, valY, "Reset");
+						tabService.displayTable("", tab);
 						
 						continue;
 					case 5:
-						tabService.insertRow();
+						tab = tabService.insertRow(tab);
 						
 						valX++;
 						
@@ -79,11 +79,11 @@ public class ProgramService {
 						
 						int selectedRow = Integer.parseInt(validateInput("Sort", ""));
 						
-						tabService.sortSelectedRow(selectedRow, "");
+						tab = tabService.sortSelectedRow(selectedRow, "", tab);
 						
 						continue;
 					case 7:
-						tabService.saveUpdatedTable("");
+						tabService.saveUpdatedTable("", tab);
 						
 						continue;
 					case 8:
@@ -107,10 +107,11 @@ public class ProgramService {
 	//Should test
 	public static TableService confirmTable(String type) {
 		MyFileService myFileService = new MyFileService();
+		MyFile myFile = new MyFile();
 		
-		tabService = new TableService();
+		TableService tabService = new TableService();
 		
-		String directoryName = myFileService.DIR_NAME;
+		String directoryName = myFile.getDirectoryName();
 		if(type == "test") {
 			directoryName = "TestFolder";
 		}
@@ -127,9 +128,9 @@ public class ProgramService {
 				System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
 			
 				//Table generator
-				tabService.createTable(valX, valY, "");
-				tabService.readFiletoList("");
-				tabService.displayTable();
+				tabService.createTable(valX, valY, "Created");
+				tab = tabService.readFiletoList("");
+				tabService.displayTable("", tab);
 				
 				return tabService;
 			}
@@ -138,11 +139,11 @@ public class ProgramService {
 			
 		} else {
 			if(type != "test") {
-				tabService.readFiletoList("");
-				tabService.displayTable();
+				tab = tabService.readFiletoList("");
+				tabService.displayTable("", tab);
 				
-				valX = tabService.row;
-				valY = tabService.col;
+				valX = tab.getRows();
+				valY = tab.getCols();
 				
 				return tabService;
 			}

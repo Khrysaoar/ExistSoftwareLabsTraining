@@ -3,31 +3,40 @@ package com.mytraining.app;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+import java.util.*;
 
 /**
  * Unit test for TableService class.
  */
 public class TableServiceTest {
-	TableService ts = new TableService();
+	TableService tableService = new TableService();
+	Table tab;
+	String[] dummyArray;
+	List<String> dummyList;
+	
+	@Before
+	public void init() {
+		tab = new Table();
+		tab.setRows(2);
+		tab.setCols(5);
+		dummyArray = new String[]{"asd=456", "ASD=A}{", ":?K=dfh", "@#$=346", "bsd=4gs", ":?K=dfh", "@#$=346", "ASD=A}{", "asd=456", "bsd=4gs"};
+		dummyList =  Arrays.asList(dummyArray);
+		tab.setTableList(dummyList);
+	}
 	
 	//POSITIVE CASE
     @Test
     public void createTable_withRowsAndColsAndType_shouldRunWithoutExceptionOrError() {
 		System.out.println("[POSITIVE]TEST--createTable_withRowAndColAndType_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-    }
+		assertNotNull(tableService.createTable(3, 3, "test"));
+	}
 	
 	//NEGATIVE CASE
     @Test
     public void createTable_withNegativeRowsAndColsAndType_shouldRunWithoutExceptionOrError() {
 		System.out.println("[NEGATIVE]TEST--createTable_withNegativeRowsAndColsAndType_shouldRunWithoutExceptionOrError()");
 		try {
-			ts.createTable(-1, -3, "test");
+			tableService.createTable(-1, -3, "test");
 			
 		} catch(Exception e) {
 			fail("Should not have thrown an exception");
@@ -39,22 +48,7 @@ public class TableServiceTest {
     public void createTable_withZeroRowsAndColsAndType_shouldRunWithoutExceptionOrError() {
 		System.out.println("[NEGATIVE]TEST--createTable_withZeroRowsAndColsAndType_shouldRunWithoutExceptionOrError()");
 		try {
-			ts.createTable(0, 0, "test");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-    }
-	
-	//POSITIVE CASE
-	@Test
-    public void readFiletoList_withTestTypeParameter_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--readFiletoList_withTestTypeParameter_shouldRunWithoutExceptionOrError())");
-		try {
-			ts.createTable(3, 3, "test");
-
-			//Test Method
-			ts.readFiletoList("test");
+			tableService.createTable(0, 0, "test");
 			
 		} catch(Exception e) {
 			fail("Should not have thrown an exception");
@@ -62,14 +56,21 @@ public class TableServiceTest {
     }
 	
 	//NEGATIVE CASE
+	@Test(expected=NullPointerException.class)
+    public void readFiletoList_withTestTypeParameter_shouldExpectExceptionOrError() {
+		System.out.println("[NEGATIVE]TEST--readFiletoList_withTestTypeParameter_shouldExpectExceptionOrError())");
+		assertNull(tableService.readFiletoList("test"));
+    }
+	
+	//NEGATIVE CASE
 	@Test
     public void readFiletoList_withOutTestTypeParameter_shouldRunWithExceptionOrError() {
 		System.out.println("[NEGATIVE]TEST--readFiletoList_withOutTestTypeParameter_shouldRunWithExceptionOrError())");
 		try {
-			ts.createTable(3, 3, "test");
+			tableService.createTable(3, 3, "test");
 			
 			//Test Method
-			ts.readFiletoList("");
+			tableService.readFiletoList("");
 			fail("Should throw an Exception");
 			
 		} catch(Exception e) {
@@ -82,7 +83,7 @@ public class TableServiceTest {
     public void readListToArr_shouldRunWithoutExceptionOrError() {
 		System.out.println("[POSITIVE]TEST--readListToArr_shouldRunWithoutExceptionOrError()");
 		try {
-			ts.readListToArr();
+			tableService.readListToArr("test", tab);
 			
 		} catch(Exception e) {
 			fail("Should not have thrown an exception");
@@ -92,34 +93,9 @@ public class TableServiceTest {
 		
 	//POSITIVE CASE
 	@Test
-    public void displayTable_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--displayTable_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			
-			//Test Method
-			ts.displayTable();
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
-    }
-	
-	//NEGATIVE CASE
-	@Test
-    public void displayTable_withoutCreateTable_shouldRunWithoutExceptionOrError() {
-		System.out.println("[NEGATIVE]TEST--displayTable_withoutCreateTable_shouldRunWithoutExceptionOrError()");
-		try {
-			//Commented for negative case
-			//ts.createTable(3, 3, "test");
-			
-			//Test Method
-			ts.displayTable();
-			
-		} catch(Exception e) {
-			fail("Should initiate createTable() method first before displaying it.");
-		}
+    public void displayTable_shouldReturnTrue() {
+		System.out.println("[POSITIVE]TEST--displayTable_shouldReturnTrue()");
+		assertTrue(tableService.displayTable("test", tab));
 			
     }
 	
@@ -128,7 +104,7 @@ public class TableServiceTest {
     public void saveUpdatedTable_withTestTypeParameter_shouldRunWithoutExceptionOrError() {
 		System.out.println("[POSITIVE]TEST--saveUpdatedTable_withTestTypeParameter_shouldRunWithoutExceptionOrError()");
 		try {
-			ts.saveUpdatedTable("test");
+			tableService.saveUpdatedTable("test", tab);
 			
 		} catch(Exception e) {
 			fail("Should not have thrown an exception");
@@ -139,155 +115,43 @@ public class TableServiceTest {
 	//POSITIVE CASE
 	@Test
     public void sortSelectedRow_withSelectedRowAndTestTypeParameter_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--sortSelectedRow_withSelectedRowAndTestTypeParameter_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			
-			//Test Method
-			ts.sortSelectedRow(2, "test");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}	
+		System.out.println("[POSITIVE]TEST--sortableServiceelectedRow_withSelectedRowAndTestTypeParameter_shouldRunWithoutExceptionOrError()");
+		assertNotNull(tableService.sortSelectedRow(2, "test", tab));
     }
 	
 	//NEGATIVE CASE
 	@Test
     public void sortSelectedRow_withSelectedRowZeroAndTestTypeParameter_shouldRunWithoutExceptionOrError() {
-		System.out.println("[NEGATIVE]TEST--sortSelectedRow_withSelectedRowZeroAndTestTypeParameter_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			
-			//Test Method
-			ts.sortSelectedRow(0, "test");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}	
+		System.out.println("[NEGATIVE]TEST--sortableServiceelectedRow_withSelectedRowZeroAndTestTypeParameter_shouldRunWithoutExceptionOrError()");
+		assertNotNull(tableService.sortSelectedRow(0, "test", tab));
     }
 	
 	//NEGATIVE CASE
 	@Test
     public void sortSelectedRow_withSelectedRowNegativeValueAndTestTypeParameter_shouldRunWithoutExceptionOrError() {
-		System.out.println("[NEGATIVE]TEST--sortSelectedRow_withSelectedRowNegativeValueAndTestTypeParameter_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			
-			//Test Method
-			ts.sortSelectedRow(-4, "test");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}	
-    }
-	
-	//POSITIVE CASE
-	@Test
-    public void insertRow_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--insertRow_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			ts.insertRow();
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
+		System.out.println("[NEGATIVE]TEST--sortableServiceelectedRow_withSelectedRowNegativeValueAndTestTypeParameter_shouldRunWithoutExceptionOrError()");
+		assertNotNull(tableService.sortSelectedRow(-4, "test", tab));
     }
 	
 	//NEGATIVE CASE
-	@Test
-    public void insertRow_withoutCreatingTable_shouldRunWithoutExceptionOrError() {
+	@Test(expected=NullPointerException.class)
+    public void insertRow_withExistingTableInstance_shouldExpectExceptionOrError() {
+		System.out.println("[NEGATIVE]TEST--insertRow_withExistingTableInstance_shouldRunWithoutExceptionOrError()");
+		assertNotNull(tableService.insertRow(tab));
+    }
+	
+	//NEGATIVE CASE
+	@Test(expected=NullPointerException.class)
+    public void insertRow_withNewTableInstance_shouldExpectExceptionOrError() {
 		System.out.println("[NEGATIVE]TEST--insertRow_withoutCreatingTable_shouldRunWithoutExceptionOrError()");
-		try {
-			//ts.createTable(3, 3, "test");
-			ts.insertRow();
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
-    }
-	
-	//POSITIVE CASE
-	@Test
-    public void resetTable_withRowsAndCols_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--resetTable_withRowsAndCols_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.resetTable(4, 4);
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
+		assertNotNull(tableService.insertRow(new Table()));
     }
 	
 	//NEGATIVE CASE
-	@Test
-    public void resetTable_withZeroRowsAndCols_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--resetTable_withZeroRowsAndCols_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.resetTable(0, 0);
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
-    }
-	
-	//NEGATIVE CASE
-	@Test
-    public void resetTable_withNegativeRowsAndCols_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--resetTable_withNegativeRowsAndCols_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.resetTable(-90, -9);
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
-    }
-	
-	//POSITIVE CASE
-	@Test
-    public void updateCellTable_withSelectedRowandColandNewValue_shouldRunWithoutExceptionOrError() {
-		System.out.println("[POSITIVE]TEST--updateCellTable_withSelectedRowandColandNewValue_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			ts.updateCellTable(2, 2, "TST");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
-    }
-	
-	//NEGATIVE CASE
-	@Test
-    public void updateCellTable_withZeroSelectedRowandColandNewValue_shouldRunWithoutExceptionOrError() {
-		System.out.println("[NEGATIVE]TEST--updateCellTable_withZeroSelectedRowandColandNewValue_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			ts.updateCellTable(0, 0, "TST");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
-    }
-	
-	//NEGATIVE CASE
-	@Test
-    public void updateCellTable_withNegativeSelectedRowandColandNewValue_shouldRunWithoutExceptionOrError() {
-		System.out.println("[NEGATIVE]TEST--updateCellTable_withNegativeSelectedRowandColandNewValue_shouldRunWithoutExceptionOrError()");
-		try {
-			ts.createTable(3, 3, "test");
-			ts.updateCellTable(-90, -9, "TST");
-			
-		} catch(Exception e) {
-			fail("Should not have thrown an exception");
-		}
-			
+	@Test(expected=NullPointerException.class)
+    public void updateCellTable_withSelectedRowandColTableAndNewValue_shouldExpectExceptionOrError() {
+		System.out.println("[NEGATIVE]TEST--updateCellTable_withSelectedRowandColTableAndNewValue_shouldResultNullPointerException()");
+		assertNotNull(tableService.updateCellTable(2, 2, "_as", tab, "test"));			
     }
 	
 	//POSITIVE CASE
@@ -295,8 +159,7 @@ public class TableServiceTest {
     public void searchTable_withSearchQuery_shouldRunWithoutExceptionOrError() {
 		System.out.println("[POSITIVE]TEST--searchTable_withSearchQuery_shouldRunWithoutExceptionOrError()");
 		try {
-			ts.createTable(7, 7, "test");
-			ts.searchTable("4");
+			tableService.searchTable(tab, "4");
 			
 		} catch(Exception e) {
 			fail("Should not have thrown an exception");
@@ -306,11 +169,10 @@ public class TableServiceTest {
 	
 	//NEGATIVE CASE
 	@Test
-    public void searchTable_withoutSearchQuery_shouldRunWithoutExceptionOrError() {
-		System.out.println("[NEGATIVE]TEST--searchTable_withoutSearchQuery_shouldRunWithoutExceptionOrError()");
+    public void searchTable_withoutableServiceearchQuery_shouldRunWithoutExceptionOrError() {
+		System.out.println("[NEGATIVE]TEST--searchTable_withoutableServiceearchQuery_shouldRunWithoutExceptionOrError()");
 		try {
-			ts.createTable(7, 7, "test");
-			ts.searchTable("");
+			tableService.searchTable(tab, "");
 			
 		} catch(Exception e) {
 			fail("Should not have thrown an exception");
